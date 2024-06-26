@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fireDB } from '@/Firebase/Config'; // Adjust this import based on your Firebase setup
+import { fireDB } from '@/Firebase/config'; // Adjust this import based on your Firebase setup
 import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
 import { useSelector } from 'react-redux'; // Assuming you use Redux for managing cart state
 

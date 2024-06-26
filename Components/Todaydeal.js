@@ -8,7 +8,7 @@ import { addToCart, deleteFromCart } from "@/redux/cartSlice";
 import { addToWish, deleteFromWish } from "@/redux/wishSlice";
 import { FaHeart } from 'react-icons/fa';
 import { collection, addDoc } from 'firebase/firestore';
-import { fireDB, auth } from '@/Firebase/Config'; // Adjust this import based on your Firebase setup
+import { fireDB,auth } from "@/Firebase/config";// Adjust this import based on your Firebase setup
 import salestag from '../Components/images/salestag.jpg'
 import Image from "next/image";
 import Slider from "react-slick";
@@ -266,7 +266,7 @@ const Todaydeal= () => {
 
             {/* Main */}
             <section className="text-gray-600 body-font">
-                <div className="container px-14 py-4">
+                <div className="container py-4 px-14">
                     <Slider {...settings}>
                         {searchResults.map((item, index) => {
                             const { id, title, actualPrice, discountPrice, discountPercent, productImageUrl, salePrice } = item;

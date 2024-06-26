@@ -5,7 +5,7 @@ import { decrementQuantity, incrementQuantity, deleteFromCart } from '@/redux/ca
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { collection, addDoc, updateDoc, doc, getDocs } from 'firebase/firestore';
-import { fireDB, auth } from '@/Firebase/Config'; // Adjust this import based on your Firebase setup
+import { fireDB,auth } from '@/Firebase/config';// Adjust this import based on your Firebase setup
 
 const CartPage = () => {
   const cartItems = useSelector((state) => state.cart);
