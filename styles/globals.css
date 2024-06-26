@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind Components;
+@tailwind utilities;
+
+
+
+/* Add this to your global CSS file */
+.image-zoom-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-zoom {
+  transition: transform 0.5s ease;
+}
+
+.image-zoom-container:hover .image-zoom {
+  transform: scale(1.5); /* Adjust the scale as needed */
+}
+.slider {
+  margin: 0 -10px; /* Adjust as per your design */
+}
+
+.slider .slick-slide {
+  padding: 0 5px; /* Adjust padding to create space between slides */
+}
+
