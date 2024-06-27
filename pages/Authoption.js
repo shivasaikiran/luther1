@@ -94,19 +94,22 @@ const AuthOption = () => {
   };
 
   const saveUserDataToLocal = (user) => {
-    const userData = {
-      uid: user.uid,
-      name: user.displayName || name,
-      email: user.email,
-    };
-    localStorage.setItem('userData', JSON.stringify(userData));
+    if (typeof window !== 'undefined') {
+      const userData = {
+        uid: user.uid,
+        name: user.displayName || name,
+        email: user.email,
+      };
+      localStorage.setItem('userData', JSON.stringify(userData));
+    }
   };
 
   const handleInputChange = (setterFunc, value, key) => {
     setterFunc(value);
-    localStorage.setItem(key, value); // Store the value in localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(key, value); // Store the value in localStorage
+    }
   };
-
   const context = useContext(myContext);
   const { loading, setLoading } = context;
 
