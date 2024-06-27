@@ -2,7 +2,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/Firebase/*": ["Firebase/*"]
+      "@/Firebase/*": ["Firebase/*"],
+      "@/Context/*": ["Context/*"],
+      "@/Components/*": ["Components/*"]
     }
   }
 }
