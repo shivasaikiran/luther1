@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import myContext from "@/Context/myContext";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, deleteFromCart } from "@/redux/cartSlice";
 import { addToWish, deleteFromWish } from "@/redux/wishSlice";
@@ -86,24 +85,21 @@ const HomePageProductCard = () => {
       }, [cartItems]);
     
 
-    const addCart = (item) => {
-        dispatch(addToCart(item));
-        toast.success("Added to cart");
-    };
+      const addCart = (item) => {
+        dispatch(addToCart({ ...item, quantity: 1 }));
+        // toast.success("Added to cart");
+      };
 
-    const deleteCart = (item) => {
-        dispatch(deleteFromCart(item));
-        toast.success("Removed from cart");
-    };
+ 
 
     const addWish = (item) => {
         dispatch(addToWish(item));
-        toast.success("Added to wishlist");
+        // toast.success("Added to wishlist");
     };
 
     const deleteWish = (item) => {
         dispatch(deleteFromWish(item));
-        toast.success("Removed from wishlist");
+        // toast.success("Removed from wishlist");
     };
 
     useEffect(() => {
@@ -132,7 +128,7 @@ const HomePageProductCard = () => {
     const handleAddressSubmit = async (e) => {
         e.preventDefault();
         try {
-            toast.success('Address saved!');
+            // toast.success('Address saved!');
             setIsModalOpen(false);
             if (paymentMethod === 'cod') {
                 handleCodPayment();
@@ -141,7 +137,7 @@ const HomePageProductCard = () => {
             }
         } catch (error) {
             console.error('Error saving address: ', error);
-            toast.error('Failed to save address.');
+            // toast.error('Failed to save address.');
         }
     };
 
@@ -151,7 +147,7 @@ const HomePageProductCard = () => {
 
     const handlePayNow = () => {
         if (!currentUser) {
-            toast.error('User not authenticated. Please log in.');
+            // toast.error('User not authenticated. Please log in.');
             return;
         }
 
@@ -205,7 +201,7 @@ const HomePageProductCard = () => {
 
     const handleCodPayment = async () => {
         if (!currentUser) {
-            toast.error('User not authenticated. Please log in.');
+            // toast.error('User not authenticated. Please log in.');
             return;
         }
 
@@ -221,10 +217,10 @@ const HomePageProductCard = () => {
             const docRef = await addDoc(collection(fireDB, 'users', currentUser.uid, 'orders'), orderData);
             console.log('Order document written with ID: ', docRef.id);
 
-            toast.success('Order placed successfully!');
+            // toast.success('Order placed successfully!');
         } catch (error) {
             console.error('Error saving order: ', error);
-            toast.error('Failed to place order.');
+            // toast.error('Failed to place order.');
         }
     };
 
@@ -275,7 +271,7 @@ const HomePageProductCard = () => {
                 <div className="container py-8 px-14">
                     <Slider {...settings}>
                         {searchResults.map((item, index) => {
-                            const { id, title, actualPrice, discountPrice, discountPercent, productImageUrl, salePrice } = item;
+                            const { id, title, actualPrice, price, discountPercent, productImageUrl, salePrice } = item;
                             return (
                                 <div key={index}  className="  h-[290px] w-[200px] border  border-gray-300 shadow-md cursor-pointer rounded-xl hover:shadow-green-800  ">
                                     <img
@@ -296,19 +292,24 @@ const HomePageProductCard = () => {
 
                                     <div className="relative flex flex-col justify-between flex-1 p-4 bottom-4">
                                         <div>
-                                            <div className="flex items-center justify-between mt-4 mb-[-10px] relative bottom-[117px] left-[179px]">
-                                                <FaHeart
-                                                    className={`cursor-pointer ${wishItems.some(p => p.id === id) ? 'text-red-500' : 'text-green-500'}`}
-                                                    onClick={() => {
-                                                        wishItems.some(p => p.id === id) ? deleteWish(item) : addWish(item);
-                                                    }}
-                                                />
-                                            </div>
+                                        <div className="flex items-center justify-between mt-4 mb-[-10px] relative bottom-[117px] left-[178px]">
+  <FaHeart
+    className={`cursor-pointer ${wishItems.find(p => p.id === id) ? 'text-red-500' : 'text-green-500'}`}
+    onClick={() => {
+      const index = wishItems.findIndex(p => p.id === id);
+      if (index !== -1) {
+        deleteWish(wishItems[index]);
+      } else {
+        addWish(item);
+      }
+    }}
+  />
+</div>
                                             <h1 className="relative bottom-[120px]  mb-2 text-sm font-bold text-center text-gray-900">
                                                 {title.substring(0, 25)}
                                             </h1>
                                             <h1 className="mb-2 text-sm font-bold text-gray-900  relative bottom-[115px] left-[60px] ">
-                                                ₹{discountPrice} <span className="pl-2 font-semibold text-gray-400 line-through "> ₹{actualPrice} </span>
+                                                ₹{price} <span className="pl-2 font-semibold text-gray-400 line-through "> ₹{actualPrice} </span>
                                             </h1>
                                         </div>
                                         <div className="relative bottom-[110px] flex justify-center space-x-2">
@@ -430,7 +431,7 @@ const HomePageProductCard = () => {
                 </div>
             )}
 
-            <ToastContainer />
+            
         </div>
     );
 };

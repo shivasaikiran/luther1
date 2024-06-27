@@ -269,7 +269,7 @@ const Trending = () => {
                 <div className="container py-6 px-14">
                     <Slider {...settings}>
                         {searchResults.map((item, index) => {
-                            const { id, title, actualPrice, discountPrice, discountPercent, productImageUrl, salePrice } = item;
+                            const { id, title, actualPrice, price, discountPercent, productImageUrl, salePrice } = item;
                             return (
                                 <div key={index}  className="  h-[290px] w-[200px] border  border-gray-300 shadow-md cursor-pointer rounded-xl hover:shadow-green-800  ">
                                     <img
@@ -302,7 +302,7 @@ const Trending = () => {
                                                 {title.substring(0, 25)}
                                             </h1>
                                             <h1 className="mb-2 text-sm font-bold text-gray-900  relative bottom-[115px] left-[60px] ">
-                                                ₹{discountPrice} <span className="pl-2 font-semibold text-gray-400 line-through "> ₹{actualPrice} </span>
+                                                ₹{price} <span className="pl-2 font-semibold text-gray-400 line-through "> ₹{actualPrice} </span>
                                             </h1>
                                         </div>
                                         <div className="relative bottom-[110px] flex justify-center space-x-2">

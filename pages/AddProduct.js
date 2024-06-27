@@ -23,7 +23,7 @@ const AddProductPage = () => {
     const [product, setProduct] = useState({
         title: "",
         actualPrice: "",
-        discountPrice: "",
+        price: "",
         discountPercent: 0,
         productImageUrl: "",
         category: "",
@@ -111,7 +111,7 @@ const AddProductPage = () => {
                     <input
                         type="number"
                         name="discountPrice"
-                        value={product.discountPrice}
+                        value={product.price}
                         onChange={handlePriceChange}
                         placeholder="Discount Price"
                         className="px-2 py-2 text-pink-300 placeholder-pink-300 border border-pink-200 rounded-md outline-none bg-pink-50 w-96"

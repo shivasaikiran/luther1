@@ -53,7 +53,7 @@ const CartPage = () => {
 
   // Calculate cart total whenever cartItems change
   useEffect(() => {
-    const total = cartItems.reduce((acc, item) => acc + (item.discountPrice * item.quantity), 0);
+    const total = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
     setCartTotal(total);
   }, [cartItems]);
 
@@ -391,7 +391,7 @@ const CartPage = () => {
         </div>
       )}
       {/* Toast notifications */}
-      <ToastContainer />
+      
     </div>
   );
 };

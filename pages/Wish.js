@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Trash } from 'lucide-react';
 import { decrementQuantity, incrementQuantity, deleteFromWish } from "@/redux/wishSlice";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from "react";
 
@@ -144,7 +144,7 @@ const WishPage = () => {
                     </section>
                 </form>
             </div>
-            <ToastContainer />
+            
         </div>
     );
 };
