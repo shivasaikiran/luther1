@@ -81,9 +81,9 @@ const HomePageProductCard = () => {
     }, [searchTerm, filteredProducts]);
 
     useEffect(() => {
-        const total = cartItems.reduce((sum, item) => sum + item.discountPrice, 0);
+        const total = cartItems.reduce((acc, item) => acc + (item.discountPrice * item.quantity), 0);
         setCartTotal(total);
-    }, [cartItems]);
+      }, [cartItems]);
     
 
     const addCart = (item) => {
