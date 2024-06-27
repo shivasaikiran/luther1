@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs, updateDoc, doc, addDoc } from 'firebase/firestore';
-import { fireDB, auth } from '@/Firebase/Config';
+import { fireDB, auth } from '@/Firebase/config';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProgressIndicator from '@/Components/ProgressIndicator';

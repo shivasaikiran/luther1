@@ -22,8 +22,8 @@ if (!getApps().length) {
 
 const auth = getAuth(app);
 const fireDB = getFirestore(app);
-const storage = getStorage(app);
 
 
 
-export { auth, GoogleAuthProvider, RecaptchaVerifier, signInWithPhoneNumber, app , fireDB ,storage};
+
+export { auth, GoogleAuthProvider, RecaptchaVerifier, signInWithPhoneNumber, app , fireDB };
