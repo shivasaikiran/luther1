@@ -2,8 +2,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@//*": ["/*"],
-     
+      "@/Firebase/*": ["Firebase/*"],
+      "@/Context/*": ["Context/*"],
+      "@/Components/*": ["Components/*"],
+      "@/redux/*": ["redux/*"]
     } 
   }
 }
