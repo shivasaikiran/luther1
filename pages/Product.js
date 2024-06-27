@@ -80,6 +80,12 @@ const HomePageProductCard = () => {
         }
     }, [searchTerm, filteredProducts]);
 
+    useEffect(() => {
+        const total = cartItems.reduce((sum, item) => sum + item.discountPrice, 0);
+        setCartTotal(total);
+    }, [cartItems]);
+    
+
     const addCart = (item) => {
         dispatch(addToCart(item));
         toast.success("Added to cart");

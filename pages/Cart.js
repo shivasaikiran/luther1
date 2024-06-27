@@ -53,9 +53,10 @@ const CartPage = () => {
 
   // Calculate cart total whenever cartItems change
   useEffect(() => {
-    const total = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    const total = cartItems.reduce((sum, item) => sum + item.discountPrice, 0);
     setCartTotal(total);
-  }, [cartItems]);
+}, [cartItems]);
+
 
   const deleteCart = (item) => {
     dispatch(deleteFromCart(item));
@@ -224,7 +225,7 @@ const CartPage = () => {
                               </div>
                               {/* Item price */}
                               <div className="flex items-end mt-1">
-                                <p className="text-sm font-medium text-gray-900">₹{item.price}</p>
+                                <p className="text-sm font-medium text-gray-900">₹{item.discountPrice}</p>
                               </div>
                             </div>
                           </div>
