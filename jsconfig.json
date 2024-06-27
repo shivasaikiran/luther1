@@ -4,7 +4,8 @@
     "paths": {
       "@/Firebase/*": ["Firebase/*"],
       "@/Context/*": ["Context/*"],
-      "@/Components/*": ["Components/*"]
+      "@/Components/*": ["Components/*"],
+      "@/redux/*": ["redux/*"]
     }
   }
 }
