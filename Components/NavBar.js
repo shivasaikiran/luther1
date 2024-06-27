@@ -75,6 +75,19 @@ const Header = () => {
     setClickedItem(item); // Set the clicked item in state
     setProfileDropdownOpen(false); // Close the profile dropdown
   };
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (!event.target.closest('.profile-dropdown')) {
+  //       setProfileDropdownOpen(false);
+  //     }
+  //   };
+
+  //   document.addEventListener('mousedown', handleClickOutside);
+
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, []);
 
   return (
     <div>
@@ -382,11 +395,9 @@ const Header = () => {
     
 
       {/* Search Bar */}
-      <div>
-      {/* Mobile Header */}
-      <header className="relative flex items-center justify-between bg-white md:hidden">
+     {/* Mobile Header */}
+     <header className="relative flex items-center justify-between bg-white md:hidden">
         <div className="flex items-center p-4 space-x-2">
-          
           <Link href="/">
             <Image src={logo} alt="Logo" className="w-[100px] h-12 bg-black" />
           </Link>
@@ -394,7 +405,6 @@ const Header = () => {
         <div className="flex items-center p-4 space-x-4">
           <button onClick={() => setProfileDropdownOpen(!profileDropdownOpen)} className="relative">
             <FaUser size={24} className="text-gray-500 hover:text-green-500" />
-            
           </button>
           <Link href="/wishlist" className="relative">
             <FaHeart size={24} className="text-gray-500 hover:text-green-500" />
@@ -412,7 +422,7 @@ const Header = () => {
 
         {/* Profile Dropdown */}
         {profileDropdownOpen && (
-          <div className="absolute right-4 top-16 z-50 w-[300px] mt-2 bg-white border rounded shadow-lg">
+          <div className="absolute right-4 top-16 z-50 w-[300px] mt-2 bg-white border rounded shadow-lg profile-dropdown">
             <div className="h-full max-w-xs p-4 border-r border-gray-200 bg-gray-50">
               <div className="flex items-center justify-center mb-8">
                 <div className="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full">
@@ -501,10 +511,11 @@ const Header = () => {
           </div>
         )}
       </header>
+
       {/* Search Bar */}
       <div className="mb-6 bg-white md:hidden">
         <div className="relative flex items-center flex-1 mx-4 space-x-2">
-        <button onClick={() => setIsOpen(!isOpen)} className="focus:outline-none">
+          <button onClick={() => setIsOpen(!isOpen)} className="focus:outline-none">
             <FaBars size={24} />
           </button>
           <select className="px-4 border rounded-l-lg h-[30px] w-[60px] relative left-4 border-r pb-1 ">
@@ -526,73 +537,72 @@ const Header = () => {
           </div>
         </div>
       </div>
-    </div>
-    
 
       {/* Overlay and Sidebar */}
       <div className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity z-auto ${isOpen ? 'block' : 'hidden'}`}></div>
-      <nav className={`fixed inset-y-0 left-0 w-4/5 bg-white overflow-y-auto transition-transform transform z-50 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="flex flex-col p-4 space-y-4">
-          <div className="flex justify-end">
-            <button onClick={() => setIsOpen(false)} className="focus:outline-none">
-              <FaTimes size={24} />
-            </button>
-          </div>
-          <div>
-            <button onClick={() => toggleDropdown('about')} className="flex items-center justify-between w-full text-left hover:text-green-500 focus:outline-none">
-              About <FaChevronDown />
-            </button>
-            {dropdownOpen.about && (
-              <div className="pl-4">
-                <Link href="/about/our-story" className="block hover:text-green-500">Our Story</Link>
-                <Link href="/about/team" className="block hover:text-green-500">Team</Link>
-                <Link href="/about/careers" className="block hover:text-green-500">Careers</Link>
-              </div>
-            )}
-          </div>
-          <div>
-            <button onClick={() => toggleDropdown('shop')} className="flex items-center justify-between w-full text-left hover:text-green-500 focus:outline-none">
-              Shop <FaChevronDown />
-            </button>
-            {dropdownOpen.shop && (
-              <div className="pl-4">
-                <Link href="/shop/men" className="block hover:text-green-500">Men</Link>
-                <Link href="/shop/women" className="block hover:text-green-500">Women</Link>
-                <Link href="/shop/kids" className="block hover:text-green-500">Kids</Link>
-              </div>
-            )}
-          </div>
-          <div>
-            <button onClick={() => toggleDropdown('vendors')} className="flex items-center justify-between w-full text-left hover:text-green-500 focus:outline-none">
-              Vendors <FaChevronDown />
-            </button>
-            {dropdownOpen.vendors && (
-              <div className="pl-4">
-                <Link href="/vendors/vendor1" className="block hover:text-green-500">Vendor 1</Link>
-                <Link href="/vendors/vendor2" className="block hover:text-green-500">Vendor 2</Link>
-                <Link href="/vendors/vendor3" className="block hover:text-green-500">Vendor 3</Link>
-              </div>
-            )}
-          </div>
-          <div>
-            <button onClick={() => toggleDropdown('blog')} className="flex items-center justify-between block w-full text-left hover:text-green-500 focus:outline-none">
-              Blog <FaChevronDown />
-            </button>
-            {dropdownOpen.blog && (
-              <div className="pl-4">
-                <Link href="/blog/latest-posts" className="block hover:text-green-500">Latest Posts</Link>
-                <Link href="/blog/news" className="block hover:text-green-500">News</Link>
-                <Link href="/blog/events" className="block hover:text-green-500">Events</Link>
-              </div>
-            )}
-          </div>
-          <Link href="/contact" className="block hover:text-green-500">Contact</Link>
-          <Link href="/compare" className="block hover:text-green-500">Compare</Link>
-          <Link href="/wishlist" className="block hover:text-green-500">Wishlist</Link>
-          <Link href="/cart" className="block hover:text-green-500">Cart</Link>
-          <Link href="/account" className="block hover:text-green-500">Account</Link>
+<nav className={`fixed inset-y-0 left-0 w-4/5 bg-white overflow-y-auto transition-transform transform z-50 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+  <div className="flex flex-col p-4 space-y-4">
+    <div className="flex justify-end">
+      <button onClick={() => setIsOpen(false)} className="focus:outline-none">
+        <FaTimes size={24} />
+      </button>
+    </div>
+    <div>
+      <button onClick={() => toggleDropdown('about')} className="flex items-center justify-between w-full text-left hover:text-green-500 focus:outline-none">
+        About <FaChevronDown />
+      </button>
+      {dropdownOpen.about && (
+        <div className="pl-4">
+          <Link href="/about/our-story" className="block py-2 hover:text-green-500">Our Story</Link>
+          <Link href="/about/team" className="block py-2 hover:text-green-500">Team</Link>
+          <Link href="/about/careers" className="block py-2 hover:text-green-500">Careers</Link>
         </div>
-      </nav>
+      )}
+    </div>
+    <div>
+      <button onClick={() => toggleDropdown('shop')} className="flex items-center justify-between w-full text-left hover:text-green-500 focus:outline-none">
+        Shop <FaChevronDown />
+      </button>
+      {dropdownOpen.shop && (
+        <div className="pl-4">
+          <Link href="/shop/men" className="block py-2 hover:text-green-500">Men</Link>
+          <Link href="/shop/women" className="block py-2 hover:text-green-500">Women</Link>
+          <Link href="/shop/kids" className="block py-2 hover:text-green-500">Kids</Link>
+        </div>
+      )}
+    </div>
+    <div>
+      <button onClick={() => toggleDropdown('vendors')} className="flex items-center justify-between w-full text-left hover:text-green-500 focus:outline-none">
+        Vendors <FaChevronDown />
+      </button>
+      {dropdownOpen.vendors && (
+        <div className="pl-4">
+          <Link href="/vendors/vendor1" className="block py-2 hover:text-green-500">Vendor 1</Link>
+          <Link href="/vendors/vendor2" className="block py-2 hover:text-green-500">Vendor 2</Link>
+          <Link href="/vendors/vendor3" className="block py-2 hover:text-green-500">Vendor 3</Link>
+        </div>
+      )}
+    </div>
+    <div>
+      <button onClick={() => toggleDropdown('blog')} className="flex items-center justify-between block w-full text-left hover:text-green-500 focus:outline-none">
+        Blog <FaChevronDown />
+      </button>
+      {dropdownOpen.blog && (
+        <div className="pl-4">
+          <Link href="/blog/latest-posts" className="block py-2 hover:text-green-500">Latest Posts</Link>
+          <Link href="/blog/news" className="block py-2 hover:text-green-500">News</Link>
+          <Link href="/blog/events" className="block py-2 hover:text-green-500">Events</Link>
+        </div>
+      )}
+    </div>
+    <Link href="/contact" className="block py-2 hover:text-green-500">Contact</Link>
+    <Link href="/compare" className="block py-2 hover:text-green-500">Compare</Link>
+    <Link href="/wishlist" className="block py-2 hover:text-green-500">Wishlist</Link>
+    <Link href="/cart" className="block py-2 hover:text-green-500">Cart</Link>
+    <Link href="/account" className="block py-2 hover:text-green-500">Account</Link>
+  </div>
+</nav>
+
     </div>
   );
 };

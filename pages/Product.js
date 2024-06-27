@@ -111,7 +111,7 @@ const HomePageProductCard = () => {
 
     const handleBuyNow = (product) => {
         setSelectedProduct(product);
-        setCartTotal(product.price);
+        setCartTotal(product.discountPrice);
         setIsModalOpen(true);
     };
 

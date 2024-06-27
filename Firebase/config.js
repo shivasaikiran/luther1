@@ -1,7 +1,7 @@
 import { initializeApp,getApps } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
-import { getStorage } from "firebase/storage";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyBeFOfAPI8Sds3QPTW2VG-Rgty9hLrbj58",
