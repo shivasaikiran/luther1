@@ -2,10 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/Firebase/*": ["Firebase/*"],
-      "@/Context/*": ["Context/*"],
-      "@/Components/*": ["Components/*"],
-      "@/redux/*": ["redux/*"]
+      "@/components/*": ["components/*"],
+      "@/pages/*": ["pages/*"],
+      "@/styles/*": ["styles/*"],
+      "@/Firebase/*": ["Firebase/*"]
     }
-  }
+  },
+  "exclude": ["node_modules"]
 }
