@@ -100,13 +100,13 @@ const Footer = () => {
             <p className="flex items-center mb-2 font-semibold text-gray-500"><FaPhone className="mr-2 text-white" color=' #22c55e' />+919910212600</p>
             <p className="flex items-center mb-2 font-semibold text-gray-500"><FaEnvelope className="mr-2" color=' #22c55e' />luthergroups4@gmail.com</p>
             <p className="flex items-center mb-2 font-semibold text-gray-500"><FaMapMarkerAlt  className="mr-3" color=' #22c55e' />B-2, Industrial Area, Udyog Kunj, Ghaziabad, Uttar Pradesh</p>
-            {/* <div className="flex items-center space-x-6 w-56">
+            {/* <div className="flex items-center w-56 space-x-6">
         
         <a href="#" className="text-green-500 hover:text-green-700">
-          <Image src={amazon}/>
+          <Image alt='amazon' src={amazon}/>
         </a>
         <a href="#" className="text-green-500 hover:text-green-700">
-        <Image src={flipcart}/>
+        <Image alt='flipkart' src={flipcart}/>
         </a>
         
       </div> */}

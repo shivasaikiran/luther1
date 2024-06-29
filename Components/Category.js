@@ -1,70 +1,120 @@
 import { useContext, useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 import { useSpring, animated } from 'react-spring';
 import { useInterval } from 'react-use';
 import myContext from '@/Context/myContext'; // Adjust path as per your project structure
+import juices from '../Components/images/Screenshot_2024-06-25_165233-removebg-preview.png';
+import capsules from '../Components/images/Screenshot_2024-06-25_181436-removebg-preview.png';
+import drops from '../Components/images/Screenshot_2024-06-26_153147-removebg-preview.png';
+import vinegar from '../Components/images/vineger.png'
+import salt from '../Components/images/salt.png'
 
 const category = [
     {
-        image: 'https://cdn-icons-png.flaticon.com/256/4359/4359963.png',
+        image: juices,
         name: 'Herbal Juices'
     },
     {
-        image: 'https://cdn-icons-png.flaticon.com/256/11833/11833323.png',
+        image: capsules,
         name: 'Herabal Capsules'
     },
     {
-        image: 'https://cdn-icons-png.flaticon.com/256/8174/8174424.png',
+        image: vinegar,
         name: ' Herbal Vinegar'
     },
     {
-        image: 'https://cdn-icons-png.flaticon.com/256/7648/7648246.png',
+        image: drops,
         name: 'Herbal Drops'
     },
     {
-        image: 'https://cdn-icons-png.flaticon.com/256/12142/12142416.png',
+        image:salt,
         name: 'Herbal Salts'
     },
     {
-        image: 'https://cdn-icons-png.flaticon.com/256/12142/12142416.png',
-        name: 'Herbal Soaps'
-    },
-    {
-        image: 'https://cdn-icons-png.flaticon.com/256/12142/12142416.png',
-        name: 'Herbal Prash'
-    },
-    {
-        image: 'https://cdn-icons-png.flaticon.com/256/4359/4359963.png',
+        image: juices,
         name: 'Herbal Juices'
     },
     {
-        image: 'https://cdn-icons-png.flaticon.com/256/11833/11833323.png',
+        image: capsules,
         name: 'Herabal Capsules'
     },
     {
-        image: 'https://cdn-icons-png.flaticon.com/256/8174/8174424.png',
+        image: vinegar,
         name: ' Herbal Vinegar'
     },
     {
-        image: 'https://cdn-icons-png.flaticon.com/256/7648/7648246.png',
+        image: drops,
         name: 'Herbal Drops'
     },
     {
-        image: 'https://cdn-icons-png.flaticon.com/256/12142/12142416.png',
+        image:salt,
         name: 'Herbal Salts'
     },
     {
-        image: 'https://cdn-icons-png.flaticon.com/256/12142/12142416.png',
-        name: 'Herbal Soaps'
+        image: juices,
+        name: 'Herbal Juices'
     },
     {
-        image: 'https://cdn-icons-png.flaticon.com/256/12142/12142416.png',
-        name: 'Herbal Prash'
+        image: capsules,
+        name: 'Herabal Capsules'
+    },
+    {
+        image: vinegar,
+        name: ' Herbal Vinegar'
+    },
+    {
+        image: drops,
+        name: 'Herbal Drops'
+    },
+    {
+        image:salt,
+        name: 'Herbal Salts'
+    },
+    {
+        image: juices,
+        name: 'Herbal Juices'
+    },
+    {
+        image: capsules,
+        name: 'Herabal Capsules'
+    },
+    {
+        image: vinegar,
+        name: ' Herbal Vinegar'
+    },
+    {
+        image: drops,
+        name: 'Herbal Drops'
+    },
+    {
+        image:salt,
+        name: 'Herbal Salts'
+    },
+    {
+        image: juices,
+        name: 'Herbal Juices'
+    },
+    {
+        image: capsules,
+        name: 'Herabal Capsules'
+    },
+    {
+        image: vinegar,
+        name: ' Herbal Vinegar'
+    },
+    {
+        image: drops,
+        name: 'Herbal Drops'
+    },
+    {
+        image:salt,
+        name: 'Herbal Salts'
     },
     
-  
+    
     
 ];
 
@@ -166,7 +216,7 @@ const Category = () => {
                     <Link href={`/CategoryPage/${item.name}`}>
                         <div className="w-16 pt-1 mb-1 transition-all bg-green-500 rounded-full cursor-pointer lg:w-18 aspect-w-1 aspect-h-1 lg:h-18 hover:bg-green-400">
                             <div className="flex items-center justify-center">
-                                <img src={item.image} alt="img" className="rounded-full" />
+                                <Image src={item.image} alt="img" className="rounded-full" />
                             </div>
                         </div>
                     </Link>

@@ -37,7 +37,7 @@ const AdminDashboard = () => {
           <div className="py-5 border border-pink-100 bg-pink-50 rounded-xl">
             {/* image */}
             <div className="flex justify-center">
-              <img src="https://cdn-icons-png.flaticon.com/128/2202/2202112.png" alt="" />
+              <img src="https://cdn-icons-png.flaticon.com/128/2202/2202112.png" alt="admin" />
             </div>
             {/* text */}
             <div className="">

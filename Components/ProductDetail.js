@@ -52,7 +52,7 @@ const ProductDetail = () => {
                                     </td>
                                     <td className="h-12 px-6 transition duration-300 border-t border-l border-pink-100 text-md first:border-l-0 stroke-slate-500 text-slate-500 first-letter:uppercase ">
                                         <div className="flex justify-center">
-                                            <img className="w-20 " src={productImageUrl} alt="" />
+                                            <img className="w-20 " src={productImageUrl} alt="product" />
                                         </div>
                                     </td>
                                     <td className="h-12 px-6 transition duration-300 border-t border-l border-pink-100 text-md first:border-l-0 stroke-slate-500 text-slate-500 first-letter:uppercase ">

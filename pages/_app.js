@@ -6,7 +6,7 @@ import Layout from '@/Components/Layout';
 import { ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/router';
 import MyState from '@/Context/myState';
-import { Toaster } from 'react-hot-toast';
+
 import { Provider } from 'react-redux';
 import { store } from './../redux/store';
 

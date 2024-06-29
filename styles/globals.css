@@ -24,4 +24,12 @@
 .slider .slick-slide {
   padding: 0 5px; /* Adjust padding to create space between slides */
 }
+@media (max-width: 768px) {
+  .card {
+    transform: scale(0.5);
+  }
+
+   
+}
+
 

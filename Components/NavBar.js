@@ -24,7 +24,7 @@ const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState({ about: false, shop: false, vendors: false, blog: false });
    const [location, setLocation] = useState('');
   const [language, setLanguage] = useState('');
-  const [clickedItem, setClickedItem] = useState('');
+  
 
  
   const toggleDropdown = (menu) => {
@@ -285,7 +285,7 @@ const Header = () => {
       <FaShoppingCart />
       <span className="ml-1">Cart</span>
     </div>
-    <span className="absolute top-0 right-[5px] flex items-center justify-center w-4 h-4 -mr-4 mt-1 text-white bg-red-500 rounded-full">
+    <span className="absolute top-0 right-[5px] flex items-center justify-center w-4 h-4 -mr-4 mt-0 text-white bg-red-500 rounded-full">
       {cartItems.length}
     </span>
   </Link>
@@ -406,13 +406,13 @@ const Header = () => {
           <button onClick={() => setProfileDropdownOpen(!profileDropdownOpen)} className="relative">
             <FaUser size={24} className="text-gray-500 hover:text-green-500" />
           </button>
-          <Link href="/wishlist" className="relative">
+          <Link href="/Wish" className="relative">
             <FaHeart size={24} className="text-gray-500 hover:text-green-500" />
             {wishItems.length > 0 && (
               <span className="absolute top-0 right-0 px-1 text-xs text-white bg-red-500 rounded-full">{wishItems.length}</span>
             )}
           </Link>
-          <Link href="/cart" className="relative">
+          <Link href="/Cart" className="relative">
             <FaShoppingCart size={24} className="text-gray-500 hover:text-green-500" />
             {cartItems.length > 0 && (
               <span className="absolute top-0 right-0 px-1 text-xs text-white bg-red-500 rounded-full">{cartItems.length}</span>

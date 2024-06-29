@@ -33,12 +33,13 @@ const Home = () => {
    
    <Hero/>
    <Category/>
-   <ProductCard/>
+   
     <Product/>
     <Trending/>
     <Card/>
     <Todaydeal/>
     <Flashsale/>
+    <ProductCard/>
     <Track/>
     <ChatIcon/>
     <Loader/>

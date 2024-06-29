@@ -9,7 +9,7 @@ const NextArrow = (props) => {
             style={{ ...style, zIndex: 10 }}
             onClick={onClick}
         >
-            <FaChevronRight className="h-8 w-8 text-green-500 relative bottom-[45px]" />
+            <FaChevronRight className="h-8 w-8 text-green-500 relative bottom-[95px]" />
         </div>
     );
 };
@@ -22,7 +22,7 @@ const PrevArrow = (props) => {
             style={{ ...style, zIndex: 10 }}
             onClick={onClick}
         >
-            <FaChevronLeft className="h-8 w-8 text-green-500 relative bottom-[45px] right-2" />
+            <FaChevronLeft className="h-8 w-8 text-green-500 relative bottom-[95px] right-2" />
         </div>
     );
 };

@@ -28,7 +28,7 @@ const features = [
 
 const Track = () => {
   return (
-    <div className="py-10 bg-gray-50">
+    <div className="py-10 bg-gray-50 lg:mt-[-100px] mt-[80px]">
       <div className="container px-4 mx-auto">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => (

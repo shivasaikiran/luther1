@@ -33,10 +33,14 @@ const AuthOption = () => {
 
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
+  
     try {
+      // Sign in with Google using a popup
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      await setDoc(doc(fireDB, "users", user.uid), {
+  
+      // Save user data to Firestore
+      await setDoc(doc(fireDB, 'users', user.uid), {
         uid: user.uid,
         name: user.displayName,
         email: user.email,

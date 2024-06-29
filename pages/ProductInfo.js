@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
 import { doc, getDoc, addDoc, collection } from 'firebase/firestore';
 import { fireDB, auth } from '@/Firebase/config';
 import { addToCart, deleteFromCart } from '@/redux/cartSlice';
@@ -25,6 +25,8 @@ const ProductInfo = () => {
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [showFullDescription, setShowFullDescription] = useState(false);
     const [activeTab, setActiveTab] = useState('description'); // State to manage active tab
+    const [selectedImage, setSelectedImage] = useState(null); 
+    const [reviews, setReviews] = useState([]);
 
     const cartItems = useSelector((state) => state.cart);
     const dispatch = useDispatch();
@@ -93,6 +95,30 @@ const ProductInfo = () => {
         if (product) {
             fetchRelatedProducts();
         }
+    }, [product]);
+    useEffect(() => {
+        const fetchReviews = async () => {
+            if (product) {
+                try {
+                    const reviewsQuery = query(
+                        collection(fireDB, 'reviews'),
+                        where('productId', '==', product.id)
+                    );
+                    const reviewsSnapshot = await getDocs(reviewsQuery);
+
+                    const reviewsData = reviewsSnapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+
+                    setReviews(reviewsData);
+                } catch (error) {
+                    console.error('Error fetching reviews:', error);
+                }
+            }
+        };
+
+        fetchReviews();
     }, [product]);
 
     const addCart = (item) => {
@@ -186,21 +212,20 @@ const ProductInfo = () => {
     const handleReviewSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Example: Save review to Firestore (replace with your logic)
             const reviewData = {
                 userId: currentUser.uid,
+                userName: currentUser.displayName || 'Anonymous',
                 productId: product.id,
                 content: reviewContent,
-                rating: reviewRating, // Include rating in review data
-                // Add additional fields like timestamp, etc. as needed
+                rating: reviewRating,
             };
 
-            // Example: Save review to Firestore
             await addDoc(collection(fireDB, 'reviews'), reviewData);
 
             toast.success('Review submitted successfully!');
             setReviewContent('');
-            setReviewRating(0); // Reset rating after submission
+            setReviewRating(0);
+            setReviews([...reviews, reviewData]); // Add new review to state
         } catch (error) {
             console.error('Error submitting review:', error);
             toast.error('Failed to submit review.');
@@ -219,6 +244,8 @@ const ProductInfo = () => {
         setActiveTab(tabName);
     };
 
+    const highestRating = reviews.length ? Math.max(...reviews.map(review => review.rating)) : 0;
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -226,6 +253,7 @@ const ProductInfo = () => {
     if (!product) {
         return <div>Product not found</div>;
     }
+
     const StarIcon = ({ onClick, filled }) => (
         <svg
             onClick={onClick}
@@ -243,256 +271,229 @@ const ProductInfo = () => {
             ></path>
         </svg>
     );
+
+    const handleImageClick = (imageUrl) => {
+        setSelectedImage(imageUrl);
+    };
+
     return (
-        <section className="py-5 lg:py-16 font-poppins dark:bg-gray-800">
-            <div className="max-w-6xl px-4 mx-auto">
-                <div className="flex flex-wrap mb-24 -mx-4">
-                    <div className="w-full px-4 mb-8 md:w-1/2 md:mb-0">
-                        <div className="image-zoom-container">
+        <div className="container p-4 mx-auto">
+            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col md:w-1/3 md:mr-4">
+                    <img src={selectedImage || product.productImageUrl} alt="Product Image" className="w-full h-auto mb-4 transition-transform duration-300 border-2 border-gray-300 hover:scale-105" />
+                    <div className="grid grid-cols-4 gap-2">
+                        {[product.productImageUrl, product.productImageUrl, product.productImageUrl, product.productImageUrl].map((image, index) => (
                             <img
-                                className="w-full lg:h-[39em] rounded-lg image-zoom"
-                                src={product.productImageUrl}
-                                alt={product.title}
+                                key={index}
+                                src={image}
+                                alt={`Thumbnail ${index + 1}`}
+                                className="w-full h-auto transition-transform duration-300 border-2 border-gray-300 cursor-pointer hover:scale-105"
+                                onClick={() => handleImageClick(image)}
                             />
-                        </div>
-                    </div>
-                    <div className="w-full px-4 md:w-1/2">
-                        <div className="lg:pl-20">
-                            <div className="mb-6">
-                                <h2 className="max-w-xl mb-6 text-xl font-semibold leading-loose tracking-wide text-gray-700 md:text-2xl dark:text-gray-300">
-                                    {product.title}
-                                </h2>
-                                <div className="flex flex-wrap items-center mb-6">
-                                    {/* Star ratings or other elements */}
-                                </div>
-                                <p className="inline-block text-2xl font-semibold text-gray-700 dark:text-gray-400">
-                                    <span>₹{product.price}</span>
-                                </p>
-                            </div>
-                           
-                            <div className="flex flex-wrap items-center mb-6">
-                                {cartItems.some((p) => p.id === product.id) ? (
-                                    <button
-                                        onClick={() => deleteCart(product)}
-                                        className="w-full px-4 py-3 text-center text-white bg-red-500 border border-gray-600 hover:bg-red-600 hover:text-gray-100 rounded-xl"
-                                    >
-                                        Delete from Cart
-                                    </button>
-                                ) : (
-                                    <button
-                                        onClick={() => addCart(product)}
-                                        className="w-full px-4 py-3 text-center text-pink-600 bg-pink-100 border border-pink-600 hover:bg-pink-600 hover:text-gray-100 rounded-xl"
-                                    >
-                                        Add to Cart
-                                    </button>
-                                )}
-                            </div>
-                            <div className="flex gap-4 mb-6">
-                                <button
-                                    onClick={handleBuyNow}
-                                    className="w-full px-4 py-3 text-center text-gray-100 bg-pink-600 border border-transparent dark:border-gray-700 hover:border-pink-500 hover:text-pink-700 hover:bg-pink-100 rounded-xl"
-                                >
-                                    Buy Now
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="mb-6">
-                                <div className="flex mb-4 space-x-4">
-                                    <button
-                                        onClick={() => handleTabClick('description')}
-                                        className={`text-lg font-semibold ${
-                                            activeTab === 'description' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-700'
-                                        } cursor-pointer`}
-                                    >
-                                        Description
-                                    </button>
-                                    <button
-                                        onClick={() => handleTabClick('reviews')}
-                                        className={`text-lg font-semibold ${
-                                            activeTab === 'reviews' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-700'
-                                        } cursor-pointer`}
-                                    >
-                                        Reviews
-                                    </button>
-                                    <button
-                                        onClick={() => handleTabClick('specifications')}
-                                        className={`text-lg font-semibold ${
-                                            activeTab === 'specifications' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-700'
-                                        } cursor-pointer`}
-                                    >
-                                        Specifications
-                                    </button>
-                                </div>
-                                <div className="mb-6">
-                                    {activeTab === 'description' && (
-                                        <div>
-                                            <p className="text-gray-600 dark:text-gray-300">
-                                                {showFullDescription ? product.description : `${product.description.substring(0, 200)}...`}
-                                            </p>
-                                            <button
-                                                onClick={toggleDescription}
-                                                className="mt-2 text-blue-600 dark:text-blue-400 hover:underline"
-                                            >
-                                                {showFullDescription ? 'Show less' : 'Show more'}
-                                            </button>
-                                        </div>
-                                    )}
-                                    {activeTab === 'reviews' && (
-                                        <div>
-                                            {/* Display reviews */}
-                                            <h3 className="mb-2 text-lg font-semibold">Reviews</h3>
-                                            {/* Example: List reviews from state or API */}
-                                            {/* Replace with your actual review display logic */}
-                                            <ul>
-                                                <li>Review 1</li>
-                                                <li>Review 2</li>
-                                                {/* Iterate over reviews and display */}
-                                            </ul>
-                                            {/* Add review form */}
-                                            <form onSubmit={handleReviewSubmit}>
-                                    <textarea
-                                        value={reviewContent}
-                                        onChange={(e) => setReviewContent(e.target.value)}
-                                        className="w-full p-2 mb-2 border rounded"
-                                        placeholder="Write your review..."
-                                        rows="4"
-                                        required
-                                    ></textarea>
-                                    <div className="flex items-center mb-2">
-                                        {[1, 2, 3, 4, 5].map((rating) => (
-                                            <StarIcon
-                                                key={rating}
-                                                onClick={() => handleStarClick(rating)}
-                                                filled={rating <= reviewRating}
-                                            />
-                                        ))}
-                                    </div>
-                                    <button
-                                        type="submit"
-                                        className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-                                    >
-                                        Submit Review
-                                    </button>
-                                </form>
-                                        </div>
-                                    )}
-                                    {activeTab === 'specifications' && (
-                                        <div>
-                                            {/* Display specifications */}
-                                            <h3 className="mb-2 text-lg font-semibold">Specifications</h3>
-                                            {/* Example: List specifications */}
-                                            <ul>
-                                                <li>Specification 1</li>
-                                                <li>Specification 2</li>
-                                                {/* Iterate over specifications and display */}
-                                            </ul>
-                                            {/* Add your specific display logic here */}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                <div className="mb-6">
-                    <h2 className="mb-2 text-lg font-bold text-gray-700 dark:text-gray-400">Related Products:</h2>
-                    <div className="flex flex-wrap -mx-4">
-                        {relatedProducts.map((relatedProduct) => (
-                            <div key={relatedProduct.id} className="w-full px-4 mb-8 md:w-1/2 md:mb-0">
-                                <div className="image-zoom-container">
-                                    <img
-                                        className="w-full lg:h-[39em] rounded-lg image-zoom"
-                                        src={relatedProduct.productImageUrl}
-                                        alt={relatedProduct.title}
-                                    />
-                                </div>
-                                <h3 className="mt-2 text-lg font-semibold">{relatedProduct.title}</h3>
-                                <p className="text-gray-700">₹{relatedProduct.price}</p>
-                                <button
-                                    onClick={() => router.push(`/product/${relatedProduct.id}`)}
-                                    className="px-4 py-2 mt-2 text-white bg-pink-600 rounded hover:bg-pink-700"
-                                >
-                                    View Product
-                                </button>
-                            </div>
                         ))}
                     </div>
                 </div>
+                <div className="md:w-2/3">
+                    <h1 className="mb-2 text-2xl font-bold">{product.title}</h1>
+                    <p className="mt-2">
+                            Rating: 
+                            {highestRating ? (
+                                `${highestRating} out of 5 stars`
+                            ) : (
+                                '(No customer reviews)'
+                            )}
+                        </p>
+                    <div className="mb-2 text-2xl">
+                        <span className="mr-2 line-through">₹{product.actualPrice}</span>
+                        <span className="text-red-500">₹{product.price}</span>
+                    </div>
+                    <div className="p-4 mb-2">{showFullDescription ? product.description : `${product.description.substring(0, 200)}...`}</div>
+                    <button
+                        onClick={toggleDescription}
+                        className="mb-2 text-blue-500"
+                    >
+                        {showFullDescription ? 'Read Less' : 'Read More'}
+                    </button>
+                    <div className="flex">
+                        <button onClick={() => addCart(product)} className="px-4 py-2 mr-2 text-white bg-green-500 rounded">Add to Cart</button>
+                        <button onClick={handleBuyNow} className="px-4 py-2 text-white bg-red-500 rounded">Buy Now</button>
+                    </div>
+                </div>
             </div>
-            
+
+            <div className="mt-8">
+                <ul className="flex p-4 border-b">
+                    <li
+                        className={`px-4 py-2 cursor-pointer ${activeTab === 'description' ? 'border-b-2 border-green-500' : ''}`}
+                        onClick={() => handleTabClick('description')}
+                    >
+                        Description
+                    </li>
+                    <li
+                        className={`px-4 py-2 cursor-pointer ${activeTab === 'reviews' ? 'border-b-2 border-green-500' : ''}`}
+                        onClick={() => handleTabClick('reviews')}
+                    >
+                        Reviews
+                    </li>
+                    <li
+                        className={`px-4 py-2 cursor-pointer ${activeTab === 'specifications' ? 'border-b-2 border-green-500' : ''}`}
+                        onClick={() => handleTabClick('specifications')}
+                    >
+                        Specifications
+                    </li>
+                </ul>
+                <div className="mt-4">
+                    {activeTab === 'description' && (
+                        <div>{product.description}</div>
+                    )}
+                    {activeTab === 'reviews' && (
+                        
+                        <>
+                        <div className="mb-4 space-y-4">
+                            {reviews.map((review, index) => (
+                                <div key={index} className="p-4 border rounded shadow">
+                                    <p className="font-semibold">{review.userName}</p>
+                                    <div className="flex items-center mb-2">
+                                        {Array.from({ length: 5 }).map((_, starIndex) => (
+                                            <StarIcon key={starIndex} filled={starIndex < review.rating} />
+                                        ))}
+                                    </div>
+                                    <p>{review.content}</p>
+                                </div>
+                            ))}
+                        </div>
+
+                        {currentUser ? (
+                            <form onSubmit={handleReviewSubmit} className="p-4 border rounded shadow">
+                                <h2 className="mb-2 text-lg font-semibold">Leave a Review</h2>
+                                <div className="mb-2">
+                                    <label className="block mb-1">Rating:</label>
+                                    <div className="flex">
+                                        {Array.from({ length: 5 }).map((_, index) => (
+                                            <StarIcon key={index} filled={index < reviewRating} onClick={() => handleStarClick(index + 1)} />
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="mb-2">
+                                    <label className="block mb-1">Review:</label>
+                                    <textarea
+                                        className="w-full p-2 border rounded"
+                                        value={reviewContent}
+                                        onChange={(e) => setReviewContent(e.target.value)}
+                                        required
+                                    ></textarea>
+                                </div>
+                                <button type="submit" className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
+                                    Submit Review
+                                </button>
+                            </form>
+                        ) : (
+                            <p className="text-red-500">Please log in to leave a review.</p>
+                        )}
+                    </>
+                    )}
+                    {activeTab === 'specifications' && (
+                        <div>
+                            {/* Add your specifications content here */}
+                            <h2 className="mb-4 text-xl font-semibold">Specifications</h2>
+                            <ul className="list-disc list-inside">
+                                {product.specifications && product.specifications.map((spec, index) => (
+                                    <li key={index}>{spec}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            <div className="mt-8">
+                <h2 className="mb-4 text-xl font-semibold">Related Products</h2>
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+                    {relatedProducts.map((relatedProduct) => (
+                        <div key={relatedProduct.id} className="p-4 border rounded-lg">
+                            <img src={relatedProduct.productImageUrl} alt="Related Product Image" className="w-full h-auto mb-4" />
+                            <h3 className="text-lg font-semibold">{relatedProduct.title}</h3>
+                            <p className="mb-2 text-red-500">₹{relatedProduct.price}</p>
+                            <button
+                                onClick={() => addCart(relatedProduct)}
+                                className="px-4 py-2 text-white bg-blue-500 rounded"
+                            >
+                                Add to Cart
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-                    <div className="p-6 bg-white rounded shadow-lg w-[100vh]">
-                        <h2 className="mb-4 text-2xl">Enter Address</h2>
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="p-4 bg-white rounded shadow-lg">
+                        <h2 className="mb-4 text-xl font-semibold">Enter Address</h2>
                         <form onSubmit={handleAddressSubmit}>
-                            <div className="mb-4">
-                                <label className="block mb-2 text-sm font-medium text-green-500">Street</label>
+                            <div className="mb-2">
+                                <label className="block mb-1 font-semibold">Street:</label>
                                 <input
                                     type="text"
                                     name="street"
                                     value={newAddress.street}
                                     onChange={handleAddressChange}
-                                    className="w-full p-2 border rounded"
-                                    placeholder="Enter your street"
+                                    className="w-full px-2 py-1 border rounded"
                                     required
                                 />
                             </div>
-                            <div className="mb-4">
-                                <label className="block mb-2 text-sm font-medium text-green-500">City</label>
+                            <div className="mb-2">
+                                <label className="block mb-1 font-semibold">City:</label>
                                 <input
                                     type="text"
                                     name="city"
                                     value={newAddress.city}
                                     onChange={handleAddressChange}
-                                    className="w-full p-2 border rounded"
-                                    placeholder="Enter your city"
+                                    className="w-full px-2 py-1 border rounded"
                                     required
                                 />
                             </div>
-                            <div className="mb-4">
-                                <label className="block mb-2 text-sm font-medium text-green-500">State</label>
+                            <div className="mb-2">
+                                <label className="block mb-1 font-semibold">State:</label>
                                 <input
                                     type="text"
                                     name="state"
                                     value={newAddress.state}
                                     onChange={handleAddressChange}
-                                    className="w-full p-2 border rounded"
-                                    placeholder="Enter your state"
+                                    className="w-full px-2 py-1 border rounded"
                                     required
                                 />
                             </div>
-                            <div className="mb-4">
-                                <label className="block mb-2 text-sm font-medium text-green-500">Postal Code</label>
+                            <div className="mb-2">
+                                <label className="block mb-1 font-semibold">Postal Code:</label>
                                 <input
                                     type="text"
                                     name="postalCode"
                                     value={newAddress.postalCode}
                                     onChange={handleAddressChange}
-                                    className="w-full p-2 border rounded"
-                                    placeholder="Enter your postal code"
+                                    className="w-full px-2 py-1 border rounded"
                                     required
                                 />
                             </div>
-                            <div className="flex justify-end">
-                                <button
-                                    type="button"
-                                    onClick={handleCloseModal}
-                                    className="px-4 py-2 mr-2 text-gray-500 bg-gray-200 rounded"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="px-4 py-2 text-white bg-green-500 rounded"
-                                >
-                                    Save Address
-                                </button>
-                            </div>
+                            <button
+                                type="submit"
+                                className="px-4 py-2 mr-2 text-white bg-green-500 rounded"
+                            >
+                                Save Address
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleCloseModal}
+                                className="px-4 py-2 text-white bg-red-500 rounded"
+                            >
+                                Cancel
+                            </button>
                         </form>
                     </div>
                 </div>
             )}
+
             <ToastContainer />
-        </section>
+        </div>
     );
 };
 

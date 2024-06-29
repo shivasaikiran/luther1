@@ -122,7 +122,7 @@ const OrderDetail = () => {
                     {order.cartItems.map((item, i) => (
                       <li key={i} className="flex items-center space-x-2">
                         <div className="flex justify-center">
-                          <img className="w-20" src={item.productImageUrl} alt="" />
+                          <img className="w-20" src={item.productImageUrl} alt="order" />
                         </div>
                         <span>{item.title} - ₹{item.price} x {item.quantity}</span>
                       </li>
